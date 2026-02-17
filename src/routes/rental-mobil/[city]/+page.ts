@@ -1,8 +1,9 @@
-// +page.ts
 import { error } from '@sveltejs/kit';
 import { cities } from '$lib/data/cities';
 import { districts } from '$lib/data/districts';
+import { cars } from '$lib/data/cars';  // Import dari cars.ts, BUKAN units
 import { generateCityMeta } from '$lib/seo/cityMeta';
+import type { Car } from '$lib/types/rental-filters';
 
 export async function load({ params }) {
   const city = cities.find((c) => c.slug === params.city);
@@ -13,23 +14,24 @@ export async function load({ params }) {
     (d) => d.citySlug === city.slug
   );
 
-  let cityContent = null;
+  // FILTER mobil berdasarkan city
+  const availableCars: Car[] = cars.filter(car => 
+    car.availableIn.includes(city.slug)
+  );
 
-  // ✅ Gunakan $lib alias, bukan path relatif
+  let cityContent = null;
   try {
-    // Cara 1: Dengan try-catch
-    const module = await import(`$lib/content/locations/${city.slug}/_city.ts`)
-      .catch(() => null);
-    
+    const module = await import(`$lib/content/locations/${city.slug}/_city.ts`);
     cityContent = module?.default ?? null;
   } catch {
-    // Content opsional, tidak perlu error
+    // Content opsional
   }
 
   return {
     city,
     cityDistricts,
     cityContent,
+    availableCars,  // PASTIKAN ini dikirim
     meta: generateCityMeta(city)
   };
 }

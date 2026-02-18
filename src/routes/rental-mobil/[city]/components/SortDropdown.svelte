@@ -8,7 +8,7 @@
   }
 
   let { 
-    value = $bindable('harga-terendah'), 
+    value = $bindable('harga-terendah'), // Make value bindable
     onsort 
   }: { 
     value?: SortOption; 
@@ -24,7 +24,9 @@
 
   function handleChange(event: Event) {
     const select = event.target as HTMLSelectElement;
-    onsort(select.value as SortOption);
+    const selectedValue = select.value as SortOption;
+    value = selectedValue; // Update the bound value
+    onsort(selectedValue);
   }
 </script>
 
@@ -37,7 +39,7 @@
   <div class="select-wrapper">
     <select 
       id="sort-select"
-      {value}
+      bind:value={value}
       onchange={handleChange}
       class="sort-select"
     >

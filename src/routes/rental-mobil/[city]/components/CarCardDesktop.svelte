@@ -1,14 +1,17 @@
 <script lang="ts">
   // Import types agar konsisten dengan file types yang sudah kita buat
   import type { Car, RentalDuration } from '$lib/types/car';
+  import type { MouseEventHandler } from 'svelte/elements';
 
   interface Props {
-    car: Car;
-    duration: RentalDuration;
-    city: string;
+  car: Car;
+  duration: RentalDuration;
+  city: string;
+  // Gunakan nama onSelect untuk menghindari tabrakan nama global
+  onSelect?: () => void; 
   }
 
-  let { car, duration, city }: Props = $props();
+  let { car, duration, city, onSelect }: Props = $props();
 
   // Logic Harga & Label
   const price = $derived(car.price?.[duration] ?? car.price?.harian ?? 0);
@@ -19,7 +22,7 @@
   );
 
   // Logic Penamaan & Tipe (Menggabungkan Brand + Name)
-  const fullName = $derived(`${car.brand} ${car.name}`.toUpperCase());
+  const fullName = $derived(`${car.name}`.toUpperCase());
   const carType = $derived(car.type?.toUpperCase() ?? 'UNIT KENDARAAN');
   const carImage = $derived(car.image ?? car.images?.[0] ?? 'https://via.placeholder.com/300x200');
   
@@ -37,6 +40,12 @@
     
     <div class="visual-box">
       <div class="img-glow"></div>
+
+      <div class="brand-badge">
+        <span class="material-symbols-rounded">verified</span>
+        {car.brand?.toUpperCase() ?? 'UNIT'} 
+      </div>
+
       <img src={carImage} alt={fullName} class="car-render" />
     </div>
 
@@ -95,7 +104,7 @@
         </div>
       </div>
       
-      <button class="booking-btn" onclick={() => console.log('Open Booking Popup for:', car.id)}>
+      <button class="booking-btn" onclick={onSelect} type="button">
         <span>Pilih Unit</span>
         <div class="btn-icon">
           <span class="material-symbols-rounded">arrow_forward</span>

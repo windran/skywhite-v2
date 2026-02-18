@@ -13,16 +13,16 @@
   --border-medium: #d1d5db;
   
   /* Primary colors */
-  --primary-50: #eff6ff;
-  --primary-100: #dbeafe;
-  --primary-200: #bfdbfe;
-  --primary-300: #93c5fd;
-  --primary-400: #60a5fa;
-  --primary-500: #3b82f6;
-  --primary-600: #2563eb;
-  --primary-700: #1d4ed8;
-  --primary-800: #1e40af;
-  --primary-900: #1e3a8a;
+  --primary-50: #f4f6fb;
+  --primary-100: #e8edf8;
+  --primary-200: #cfdaf2;
+  --primary-300: #b4c6eb;
+  --primary-400: #95afe3;
+  --primary-500: #748fd8;
+  --primary-600: #5c77c6;
+  --primary-700: #4c63a8;
+  --primary-800: #3f5289;
+  --primary-900: #34436f;
   
   /* Icon colors */
   --sun-color: #f97316;
@@ -62,16 +62,9 @@
   --border-medium: #4b5563;
   
   /* Primary colors - inverted */
-  --primary-50: #1e3a8a;
-  --primary-100: #1e40af;
-  --primary-200: #1d4ed8;
-  --primary-300: #2563eb;
-  --primary-400: #3b82f6;
-  --primary-500: #60a5fa;
-  --primary-600: #93c5fd;
-  --primary-700: #bfdbfe;
-  --primary-800: #dbeafe;
-  --primary-900: #eff6ff;
+  --primary-400: #8ea2e6;
+  --primary-500: #7b8fe0;
+  --primary-600: #6b7fd6;
   
   /* Icon colors - lebih terang di dark mode */
   --sun-color: #fcd34d;
@@ -130,6 +123,24 @@ h6 { font-size: 1rem; font-weight: 600; }
   max-width: 1280px;
   margin: 0 auto;
   padding: 0 1rem;
+}
+
+/* ========== SURFACE / CARDS ========== */
+.glass-card {
+  background-color: color-mix(in srgb, var(--bg-primary) 85%, transparent);
+  border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-md);
+  border-radius: 1rem;
+  backdrop-filter: blur(6px) saturate(120%);
+}
+
+.card-tight {
+  padding: 1rem;
+}
+
+/* Icons */
+.material-symbols-rounded {
+  vertical-align: middle;
 }
 
 .w-full {
@@ -218,6 +229,80 @@ h6 { font-size: 1rem; font-weight: 600; }
   .lg\:pr-4 { padding-right: 1rem; }
   .lg\:pl-4 { padding-left: 1rem; }
 }
+
+/* ========== BUTTONS ========= */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  border: 1px solid transparent;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.btn-primary {
+  background: linear-gradient(180deg, var(--primary-500), var(--primary-600));
+  color: white;
+  box-shadow: 0 6px 18px rgba(59,130,246,0.12);
+}
+
+.btn-outline {
+  background: transparent;
+  border-color: var(--border-light);
+  color: var(--text-primary);
+}
+
+.btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--primary-500) 12%, transparent);
+}
+
+/* ========== MODALS / DRAWERS ========= */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 40;
+}
+
+.modal-sheet {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 50;
+  max-height: 85vh;
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
+  box-shadow: 0 -10px 30px rgba(2,6,23,0.6);
+}
+
+/* ========== FORM CONTROLS ========= */
+input, select, textarea {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-light);
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: var(--primary-500);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--primary-500) 10%, transparent);
+  outline: none;
+}
+
+/* Range visual helpers */
+.range-track-base, .range-track-fill { transition: left 0.12s linear, right 0.12s linear; }
+
+/* ========== SCROLLBAR (custom) ========== */
+.custom-scrollbar::-webkit-scrollbar { width: 10px; }
+.custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+.custom-scrollbar::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--text-secondary) 30%, transparent); border-radius: 999px; }
+
 
 /* ========== BACKGROUND UTILITIES ========== */
 .bg-white { background-color: var(--bg-primary); }
@@ -513,97 +598,386 @@ section[id]:target {
 :global(.dark) .mobile-link:hover { background: var(--bg-tertiary); color: var(--primary-400); }
 :global(.dark) .mobile-link.active { background: var(--primary-900); color: var(--primary-300); border-left-color: var(--primary-400); }
 
-/* From: src/routes/rental-mobil/[city]/components/CarCard.svelte */
-.mobile-premium-card { background: #ffffff; border-radius: 1.25rem; padding: 1.25rem; border: 1px solid #f1f5f9; box-shadow: 0 4px 20px -5px rgba(0, 0, 0, 0.05); display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1rem; }
-.top-meta { display: flex; justify-content: space-between; align-items: center; }
-.category-text { font-size: 0.65rem; font-weight: 800; color: #94a3b8; letter-spacing: 0.05em; }
-.city-text { font-size: 0.65rem; color: #94a3b8; display: flex; align-items: center; gap: 3px; }
-.city-text span { font-size: 12px; color: #3b82f6; }
-.main-visual { display: grid; grid-template-columns: 100px 1fr; gap: 1.25rem; align-items: center; }
-.img-container { background: #f8fafc; border-radius: 1rem; height: 80px; display: flex; align-items: center; justify-content: center; }
-.car-img { width: 90%; height: auto; object-fit: contain; }
-.car-name { font-size: 1.1rem; font-weight: 900; color: #1e293b; margin: 0 0 0.5rem 0; }
-.tag { display: inline-flex; align-items: center; gap: 4px; font-size: 0.65rem; font-weight: 700; padding: 3px 8px; border-radius: 6px; }
-.tag span { font-size: 14px; }
-.driver { background: #ecfdf5; color: #059669; }
-.self-drive { background: #fff7ed; color: #ea580c; }
-.specs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-.spec-item { display: flex; align-items: center; gap: 6px; font-size: 0.7rem; color: #64748b; font-weight: 600; }
-.spec-item span.material-symbols-rounded { font-size: 16px; color: #cbd5e1; }
-.divider { height: 1px; background: #f1f5f9; margin: 0.25rem 0; }
-.card-footer { display: flex; justify-content: space-between; align-items: center; }
-.price-label { font-size: 0.65rem; color: #94a3b8; }
-.amount { font-size: 1.15rem; font-weight: 900; color: #2563eb; }
-.unit { font-size: 0.75rem; color: #64748b; font-weight: 600; }
-.btn-select { background: #0f172a; color: #ffffff; border: none; padding: 0.6rem 1.25rem; border-radius: 0.75rem; font-size: 0.85rem; font-weight: 800; }
-:global(.dark) .mobile-premium-card { background: #1e293b; border-color: #334155; }
-:global(.dark) .car-name { color: #f8fafc; }
-:global(.dark) .img-container { background: #0f172a; }
-:global(.dark) .amount { color: #60a5fa; }
-:global(.dark) .btn-select { background: #334155; }
-@media (min-width: 768px) { .mobile-premium-card { display: none; } }
-
 /* From: src/routes/rental-mobil/[city]/components/CarCardDesktop.svelte */
-.card-container { background: #ffffff; border-radius: 1.5rem; padding: 1.5rem; border: 1px solid #f1f5f9; box-shadow: 0 10px 30px -15px rgba(0,0,0,0.05); transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1); max-width: 1000px; margin-bottom: 1.5rem; }
-.card-container:hover { transform: translateY(-5px); box-shadow: 0 20px 40px -10px rgba(37, 99, 235, 0.12); border-color: #3b82f6; }
-.main-grid { display: grid; grid-template-columns: 260px 1fr 260px; gap: 2.5rem; align-items: center; }
-.visual-box { position: relative; background: #f8fafc; border-radius: 1.25rem; height: 180px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-.img-glow { position: absolute; width: 100%; height: 100%; background: radial-gradient(circle, rgba(37, 99, 235, 0.08) 0%, transparent 70%); }
-.car-render { width: 85%; height: auto; object-fit: contain; z-index: 1; transition: transform 0.6s ease; }
-.card-container:hover .car-render { transform: scale(1.08) translateX(5px); }
-.meta-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
-.category-tag { font-size: 0.7rem; font-weight: 800; color: #3b82f6; letter-spacing: 0.5px; background: #eff6ff; padding: 2px 10px; border-radius: 6px; }
-.year-label { font-size: 0.75rem; color: #94a3b8; background: #f8fafc; padding: 2px 8px; border-radius: 6px; border: 1px solid #f1f5f9; }
-.car-model { font-size: 1.75rem; font-weight: 900; color: #0f172a; margin: 0 0 1.25rem 0; line-height: 1; }
-.specs-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px 24px; margin-bottom: 1.75rem; }
-.spec-item { display: flex; align-items: center; gap: 10px; color: #475569; font-size: 0.9rem; font-weight: 600; }
-.spec-item span.material-symbols-rounded { font-size: 20px; color: #cbd5e1; }
-.trust-footer { display: flex; gap: 15px; border-top: 1px dashed #e2e8f0; padding-top: 1rem; }
-.trust-pill { display: flex; align-items: center; gap: 5px; font-size: 0.75rem; color: #64748b; font-weight: 600; }
-.trust-pill span { font-size: 16px; color: #10b981; }
-.price-box { border-left: 1px solid #f1f5f9; padding-left: 2.5rem; height: 100%; display: flex; flex-direction: column; justify-content: center; }
-.price-label { font-size: 0.8rem; color: #94a3b8; margin: 0; font-weight: 600; }
-.price-display { display: flex; align-items: baseline; gap: 4px; color: #2563eb; margin: 4px 0 12px 0; }
-.currency { font-size: 1rem; font-weight: 800; } .amount { font-size: 2rem; font-weight: 900; letter-spacing: -1px; } .unit { font-size: 0.95rem; color: #64748b; font-weight: 600; }
-.location-tag { display: flex; align-items: center; gap: 6px; font-size: 0.8rem; color: #64748b; margin-bottom: 1.5rem; }
-.location-tag span { font-size: 18px; color: #3b82f6; }
-.booking-btn { background: #0f172a; color: white; border: none; padding: 0.85rem 0.85rem 0.85rem 1.75rem; border-radius: 1.1rem; font-weight: 800; display: flex; align-items: center; justify-content: space-between; cursor: pointer; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-.btn-icon { background: rgba(255,255,255,0.15); width: 36px; height: 36px; border-radius: 12px; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; }
-.booking-btn:hover { background: #2563eb; box-shadow: 0 12px 25px -5px rgba(37, 99, 235, 0.4); transform: scale(1.02); }
-.booking-btn:hover .btn-icon { background: white; } .booking-btn:hover .btn-icon span { color: #2563eb; }
-:global(.dark) .card-container { background: #1e293b; border-color: #334155; }
-:global(.dark) .car-model, :global(.dark) .price-display { color: #f8fafc; }
-:global(.dark) .visual-box { background: #0f172a; }
-:global(.dark) .price-box { border-color: #334155; }
-:global(.dark) .amount, :global(.dark) .currency { color: #60a5fa; }
-:global(.dark) .trust-footer { border-color: #334155; }
-@media (max-width: 992px) { .main-grid { grid-template-columns: 200px 1fr; } .price-box { grid-column: span 2; border-left: none; border-top: 1px solid #f1f5f9; padding: 1.5rem 0 0 0; } }
-@media (max-width: 768px) { .card-container { display: none; } }
+/* ========== CLEAN & REFINED DESKTOP CARD ========== */
+.card-container {
+  background: var(--bg-primary);
+  border-radius: 20px;
+  padding: 1.5rem;
+  border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  max-width: 1000px;
+  margin-bottom: 1.5rem;
+  overflow: hidden;
+}
+
+.card-container:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--primary-400);
+}
+
+/* Fix Grid: Membagi ruang lebih adil */
+.main-grid {
+  display: grid;
+  grid-template-columns: 280px 1fr 240px; 
+  gap: 2rem;
+  align-items: stretch; /* Membuat tinggi box harga sama dengan info */
+}
+
+/* Visual Box Refinement */
+.visual-box {
+  position: relative;
+  background: var(--bg-tertiary); /* Background halus di belakang mobil */
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  min-height: 200px;
+}
+
+.brand-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 10;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: #1e293b;
+  padding: 5px 10px;
+  border-radius: 8px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+:global(.dark) .brand-badge {
+  background: rgba(30, 41, 59, 0.7);
+  color: #f1f5f9;
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.car-render {
+  width: 90%;
+  height: auto;
+  object-fit: contain;
+  z-index: 2;
+  transition: transform 0.5s ease;
+}
+
+.card-container:hover .car-render {
+  transform: scale(1.08);
+}
+
+/* Content Info Box */
+.info-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.category-tag {
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: var(--primary-600);
+  background: var(--primary-50);
+  padding: 3px 10px;
+  border-radius: 6px;
+  text-transform: uppercase;
+}
+
+:global(.dark) .category-tag {
+  background: rgba(59, 130, 246, 0.1);
+}
+
+.car-model {
+  font-size: 1.5rem; /* Ukuran lebih proporsional */
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 0.5rem 0 1rem 0;
+}
+
+.specs-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 1.5rem;
+}
+
+.spec-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.spec-item span.material-symbols-rounded {
+  font-size: 18px;
+  color: var(--text-tertiary);
+}
+
+/* Trust Footer */
+.trust-footer {
+  display: flex;
+  gap: 12px;
+  border-top: 1px solid var(--border-light);
+  padding-top: 1rem;
+}
+
+.trust-pill {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.7rem;
+  color: var(--text-tertiary);
+}
+
+/* Price Box - Cleaner Line */
+.price-box {
+  border-left: 1px solid var(--border-light);
+  padding-left: 2rem;
+  display: flex;
+  flex-direction: column;
+  /* Hapus justify-content: center; agar tidak nempel di tengah secara vertikal */
+  justify-content: flex-start; 
+}
+
+.pricing-info {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1; /* Mengambil ruang sisa agar mendorong elemen di bawahnya */
+}
+
+.price-display {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  color: var(--primary-600);
+  margin: 4px 0 1rem 0;
+}
+
+:global(.dark) .price-display { color: var(--primary-500); }
+
+.amount { font-size: 1.75rem; font-weight: 800; }
+.unit { font-size: 0.85rem; color: var(--text-tertiary); }
+
+/* Booking Button - Soft Rounded */
+.booking-btn {
+  background: var(--text-primary);
+  color: var(--bg-primary);
+  border: none;
+  padding: 0.85rem 1.25rem; /* Sedikit lebih tebal */
+  border-radius: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  
+  /* INI KUNCINYA */
+  margin-top: auto; 
+}
+
+.booking-btn:hover {
+  background: var(--primary-600);
+  transform: scale(1.02);
+}
+
+/* Responsif */
+@media (max-width: 992px) {
+  .price-box {
+    margin-top: 1rem;
+    padding-left: 0;
+    border-left: none;
+    border-top: 1px solid var(--border-light);
+    padding-top: 1.5rem;
+  }
+  
+  .booking-btn {
+    margin-top: 0; /* Reset margin auto saat mode row mobile/tablet */
+    min-width: 160px;
+  }
+}
 
 /* From: src/routes/rental-mobil/[city]/components/FilterSidebar.svelte */
-.filter-sidebar { background: #ffffff; border-radius: 1.25rem; padding: 1.5rem; border: 1px solid #f1f5f9; box-shadow: 0 4px 20px -5px rgba(0,0,0,0.05); }
-:global(.dark) .filter-sidebar { background: #1e293b; border-color: #334155; }
-.filter-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
-.title-group { display: flex; align-items: center; gap: 0.5rem; color: #0f172a; }
-:global(.dark) .title-group { color: #f8fafc; }
-.filter-title { font-size: 1rem; font-weight: 800; margin: 0; }
-.reset-button { font-size: 0.75rem; font-weight: 700; color: #ef4444; background: #fef2f2; border: none; padding: 0.4rem 0.8rem; border-radius: 0.5rem; cursor: pointer; }
-.section-label { font-size: 0.85rem; font-weight: 700; color: #64748b; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.025em; }
-.price-bubble-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1.5rem; }
-.price-bubble { background: #f8fafc; padding: 0.6rem; border-radius: 0.75rem; display: flex; flex-direction: column; border: 1px solid #f1f5f9; }
-:global(.dark) .price-bubble { background: #0f172a; border-color: #334155; }
-.price-bubble span { font-size: 0.65rem; color: #94a3b8; } .price-bubble strong { font-size: 0.85rem; color: #3b82f6; }
-.range-container { position: relative; height: 6px; margin: 2rem 0.5rem; }
-.range-track-base { position: absolute; width: 100%; height: 100%; background: #e2e8f0; border-radius: 99px; }
-.range-track-fill { position: absolute; height: 100%; background: #3b82f6; border-radius: 99px; }
-.range-input { position: absolute; top: -5px; width: 100%; background: none; pointer-events: none; -webkit-appearance: none; appearance: none; }
-.range-input::-webkit-slider-thumb { height: 18px; width: 18px; border-radius: 50%; background: #ffffff; border: 2px solid #3b82f6; pointer-events: auto; cursor: pointer; -webkit-appearance: none; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-.range-labels { display: flex; justify-content: space-between; font-size: 0.7rem; font-weight: 600; color: #94a3b8; }
-.seat-grid { display: grid; grid-template-columns: 1fr; gap: 0.5rem; }
-.seat-pill { display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; background: #f8fafc; border: 1px solid #f1f5f9; border-radius: 0.75rem; font-size: 0.85rem; font-weight: 600; color: #475569; cursor: pointer; transition: all 0.2s; }
-:global(.dark) .seat-pill { background: #0f172a; border-color: #334155; color: #94a3b8; }
-.seat-pill.active { background: #eff6ff; border-color: #3b82f6; color: #2563eb; }
-.seat-pill span { font-size: 1.1rem; color: #cbd5e1; } .seat-pill.active span { color: #3b82f6; }
+.filter-sidebar {
+  width: 100%;
+  max-width: 340px; /* Dikecilkan dari sebelumnya */
+  background: var(--bg-primary);
+  border-radius: 12px;
+  padding: 1.25rem; /* Dikurangi agar lebih rapat */
+  border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Dark Mode adjustment */
+:global(.dark) .filter-sidebar {
+  background: var(--bg-secondary);
+  border-color: var(--border-light);
+}
+
+/* Header */
+.filter-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem; /* Dikurangi dari 2rem */
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.title-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-primary);
+}
+
+.filter-title {
+  font-size: 0.9rem; /* Lebih kecil */
+  font-weight: 600;
+  margin: 0;
+}
+
+/* Reset Button - Dibuat lebih kalem */
+.reset-button {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text-tertiary);
+  background: var(--bg-tertiary);
+  border: none;
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.reset-button:hover {
+  color: #ef4444; /* Muncul warna hanya saat hover */
+  background: #fee2e2;
+}
+
+/* Section Label */
+.section-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-tertiary);
+  margin-bottom: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Price Bubbles */
+.price-bubble-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.price-bubble {
+  background: var(--bg-tertiary);
+  padding: 0.5rem;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border-light);
+}
+
+.price-bubble span {
+  font-size: 0.6rem;
+  color: var(--text-tertiary);
+}
+
+.price-bubble strong {
+  font-size: 0.75rem;
+  color: var(--primary-600);
+}
+
+/* Range Slider - Visual lebih tipis & clean */
+.range-container {
+  position: relative;
+  height: 4px; /* Lebih tipis */
+  margin: 1.5rem 0.5rem 1rem;
+}
+
+.range-track-base {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: var(--border-light);
+  border-radius: 99px;
+}
+
+.range-track-fill {
+  position: absolute;
+  height: 100%;
+  background: var(--primary-500);
+  border-radius: 99px;
+}
+
+.range-input::-webkit-slider-thumb {
+  height: 16px; /* Thumb lebih kecil */
+  width: 16px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 2px solid var(--primary-500);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Seat Selection */
+.seat-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.4rem;
+}
+
+.seat-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.6rem 0.8rem; /* Padding lebih ramping */
+  background: var(--bg-primary);
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+:global(.dark) .seat-pill {
+  background: var(--bg-tertiary);
+}
+
+.seat-pill.active {
+  background: var(--primary-50);
+  border-color: var(--primary-500);
+  color: var(--primary-700);
+}
+
+:global(.dark) .seat-pill.active {
+  background: rgba(59, 130, 246, 0.1);
+  color: var(--primary-500);
+}
+
+.seat-pill span {
+  font-size: 1rem;
+  color: var(--text-tertiary);
+}
+
+.seat-pill.active span {
+  color: var(--primary-500);
+}
 
 /* From: src/lib/components/Breadcrumb.svelte */
 .breadcrumb { font-size: 0.875rem; }
@@ -674,73 +1048,6 @@ aside { transition: transform 0.15s ease-out; }
 :global(.dark) .amount { color: #60a5fa; }
 :global(.dark) .btn-select { background: #334155; }
 @media (min-width: 768px) { .mobile-premium-card { display: none; } }
-
-/* From: src/routes/rental-mobil/[city]/components/CarCardDesktop.svelte */
-.card-container { background: #ffffff; border-radius: 1.5rem; padding: 1.5rem; border: 1px solid #f1f5f9; box-shadow: 0 10px 30px -15px rgba(0,0,0,0.05); transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1); max-width: 1000px; margin-bottom: 1.5rem; }
-.card-container:hover { transform: translateY(-5px); box-shadow: 0 20px 40px -10px rgba(37, 99, 235, 0.12); border-color: #3b82f6; }
-.main-grid { display: grid; grid-template-columns: 260px 1fr 260px; gap: 2.5rem; align-items: center; }
-.visual-box { position: relative; background: #f8fafc; border-radius: 1.25rem; height: 180px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-.img-glow { position: absolute; width: 100%; height: 100%; background: radial-gradient(circle, rgba(37, 99, 235, 0.08) 0%, transparent 70%); }
-.car-render { width: 85%; height: auto; object-fit: contain; z-index: 1; transition: transform 0.6s ease; }
-.card-container:hover .car-render { transform: scale(1.08) translateX(5px); }
-.meta-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
-.category-tag { font-size: 0.7rem; font-weight: 800; color: #3b82f6; letter-spacing: 0.5px; background: #eff6ff; padding: 2px 10px; border-radius: 6px; }
-.year-label { font-size: 0.75rem; color: #94a3b8; background: #f8fafc; padding: 2px 8px; border-radius: 6px; border: 1px solid #f1f5f9; }
-.car-model { font-size: 1.75rem; font-weight: 900; color: #0f172a; margin: 0 0 1.25rem 0; line-height: 1; }
-.specs-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px 24px; margin-bottom: 1.75rem; }
-.spec-item { display: flex; align-items: center; gap: 10px; color: #475569; font-size: 0.9rem; font-weight: 600; }
-.spec-item span.material-symbols-rounded { font-size: 20px; color: #cbd5e1; }
-.trust-footer { display: flex; gap: 15px; border-top: 1px dashed #e2e8f0; padding-top: 1rem; }
-.trust-pill { display: flex; align-items: center; gap: 5px; font-size: 0.75rem; color: #64748b; font-weight: 600; }
-.trust-pill span { font-size: 16px; color: #10b981; }
-.price-box { border-left: 1px solid #f1f5f9; padding-left: 2.5rem; height: 100%; display: flex; flex-direction: column; justify-content: center; }
-.price-label { font-size: 0.8rem; color: #94a3b8; margin: 0; font-weight: 600; }
-.price-display { display: flex; align-items: baseline; gap: 4px; color: #2563eb; margin: 4px 0 12px 0; }
-.currency { font-size: 1rem; font-weight: 800; }
-.amount { font-size: 2rem; font-weight: 900; letter-spacing: -1px; }
-.unit { font-size: 0.95rem; color: #64748b; font-weight: 600; }
-.location-tag { display: flex; align-items: center; gap: 6px; font-size: 0.8rem; color: #64748b; margin-bottom: 1.5rem; }
-.location-tag span { font-size: 18px; color: #3b82f6; }
-.booking-btn { background: #0f172a; color: white; border: none; padding: 0.85rem 0.85rem 0.85rem 1.75rem; border-radius: 1.1rem; font-weight: 800; display: flex; align-items: center; justify-content: space-between; cursor: pointer; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-.btn-icon { background: rgba(255,255,255,0.15); width: 36px; height: 36px; border-radius: 12px; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; }
-.booking-btn:hover { background: #2563eb; box-shadow: 0 12px 25px -5px rgba(37, 99, 235, 0.4); transform: scale(1.02); }
-.booking-btn:hover .btn-icon { background: white; }
-.booking-btn:hover .btn-icon span { color: #2563eb; }
-:global(.dark) .card-container { background: #1e293b; border-color: #334155; }
-:global(.dark) .car-model, :global(.dark) .price-display { color: #f8fafc; }
-:global(.dark) .visual-box { background: #0f172a; }
-:global(.dark) .price-box { border-color: #334155; }
-:global(.dark) .amount, :global(.dark) .currency { color: #60a5fa; }
-:global(.dark) .trust-footer { border-color: #334155; }
-@media (max-width: 992px) { .main-grid { grid-template-columns: 200px 1fr; } .price-box { grid-column: span 2; border-left: none; border-top: 1px solid #f1f5f9; padding: 1.5rem 0 0 0; } }
-@media (max-width: 768px) { .card-container { display: none; } }
-
-/* From: src/routes/rental-mobil/[city]/components/FilterSidebar.svelte */
-.filter-sidebar { background: #ffffff; border-radius: 1.25rem; padding: 1.5rem; border: 1px solid #f1f5f9; box-shadow: 0 4px 20px -5px rgba(0,0,0,0.05); }
-:global(.dark) .filter-sidebar { background: #1e293b; border-color: #334155; }
-.filter-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
-.title-group { display: flex; align-items: center; gap: 0.5rem; color: #0f172a; }
-:global(.dark) .title-group { color: #f8fafc; }
-.filter-title { font-size: 1rem; font-weight: 800; margin: 0; }
-.reset-button { font-size: 0.75rem; font-weight: 700; color: #ef4444; background: #fef2f2; border: none; padding: 0.4rem 0.8rem; border-radius: 0.5rem; cursor: pointer; }
-.section-label { font-size: 0.85rem; font-weight: 700; color: #64748b; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.025em; }
-.price-bubble-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1.5rem; }
-.price-bubble { background: #f8fafc; padding: 0.6rem; border-radius: 0.75rem; display: flex; flex-direction: column; border: 1px solid #f1f5f9; }
-:global(.dark) .price-bubble { background: #0f172a; border-color: #334155; }
-.price-bubble span { font-size: 0.65rem; color: #94a3b8; }
-.price-bubble strong { font-size: 0.85rem; color: #3b82f6; }
-.range-container { position: relative; height: 6px; margin: 2rem 0.5rem; }
-.range-track-base { position: absolute; width: 100%; height: 100%; background: #e2e8f0; border-radius: 99px; }
-.range-track-fill { position: absolute; height: 100%; background: #3b82f6; border-radius: 99px; }
-.range-input { position: absolute; top: -5px; width: 100%; background: none; pointer-events: none; -webkit-appearance: none; appearance: none; }
-.range-input::-webkit-slider-thumb { height: 18px; width: 18px; border-radius: 50%; background: #ffffff; border: 2px solid #3b82f6; pointer-events: auto; cursor: pointer; -webkit-appearance: none; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-.range-labels { display: flex; justify-content: space-between; font-size: 0.7rem; font-weight: 600; color: #94a3b8; }
-.seat-grid { display: grid; grid-template-columns: 1fr; gap: 0.5rem; }
-.seat-pill { display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; background: #f8fafc; border: 1px solid #f1f5f9; border-radius: 0.75rem; font-size: 0.85rem; font-weight: 600; color: #475569; cursor: pointer; transition: all 0.2s; }
-:global(.dark) .seat-pill { background: #0f172a; border-color: #334155; color: #94a3b8; }
-.seat-pill.active { background: #eff6ff; border-color: #3b82f6; color: #2563eb; }
-.seat-pill span { font-size: 1.1rem; color: #cbd5e1; }
-.seat-pill.active span { color: #3b82f6; }
 
 /* From: src/routes/rental-mobil/[city]/components/SortDropdown.svelte */
 .chevron { position: absolute; right: 0.75rem; pointer-events: none; color: #94a3b8; font-size: 1.25rem; }
@@ -892,4 +1199,344 @@ aside { transition: transform 0.15s ease-out; }
 :global(.dark ::-webkit-scrollbar-thumb) { background: #475569; }
 
 aside { transition: transform 0.15s ease-out; }
+
+/* ========== FILTER COMPONENTS ========== */
+/* FilterSidebar */
+.filter-sidebar {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+.filter-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  gap: 1rem;
+}
+
+.title-group {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.filter-title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.filter-sidebar .material-symbols-rounded {
+  font-size: 1.5rem;
+  color: var(--primary-500);
+}
+
+.reset-button {
+  padding: 0.5rem 1rem;
+  background-color: transparent;
+  border: 1px solid var(--border-light);
+  border-radius: 0.5rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.reset-button:hover {
+  border-color: var(--primary-500);
+  color: var(--primary-500);
+}
+
+/* FilterContent */
+.filter-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.filter-section {
+  margin-bottom: 2rem;
+}
+
+.filter-section:last-child {
+  margin-bottom: 0;
+}
+
+.section-label {
+  font-weight: 700;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: 1rem;
+  letter-spacing: 0.05em;
+}
+
+.price-bubble-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.price-bubble {
+  background-color: var(--bg-secondary);
+  border: 2px solid var(--border-light);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+.price-bubble span {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+  margin-bottom: 0.25rem;
+}
+
+.price-bubble strong {
+  display: block;
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--primary-500);
+}
+
+.range-container {
+  position: relative;
+  margin-bottom: 2rem;
+  padding: 1rem 0;
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.range-track-base {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 0.25rem;
+  background-color: var(--border-medium);
+  border-radius: 9999px;
+  transform: translateY(-50%);
+  z-index: 1;
+}
+
+.range-track-fill {
+  position: absolute;
+  top: 50%;
+  height: 0.25rem;
+  background-color: var(--primary-500);
+  border-radius: 9999px;
+  transform: translateY(-50%);
+  z-index: 2;
+}
+
+.range-input {
+  position: absolute;
+  width: 100%;
+  height: 0.5rem;
+  background: transparent;
+  border: none;
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+  z-index: 5;
+  cursor: pointer;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.range-input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  background-color: var(--primary-500);
+  border: 3px solid white;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.range-input::-moz-range-thumb {
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  background-color: var(--primary-500);
+  border: 3px solid white;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.range-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+  margin-top: 0.5rem;
+}
+
+.seat-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+}
+
+.seat-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  background-color: var(--bg-secondary);
+  border: 2px solid var(--border-light);
+  border-radius: 0.75rem;
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--text-primary);
+  transition: all 0.2s ease;
+}
+
+.seat-pill:hover {
+  border-color: var(--primary-400);
+  background-color: var(--primary-50);
+}
+
+.seat-pill.active {
+  background-color: var(--primary-500);
+  border-color: var(--primary-500);
+  color: white;
+}
+
+/* FilterModal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: flex-end;
+  z-index: 50;
+  outline: none;
+}
+
+.modal-overlay:focus-visible {
+  outline: 2px solid var(--primary-500);
+  outline-offset: 2px;
+}
+
+.modal-content {
+  background-color: var(--bg-primary);
+  width: 100%;
+  max-height: 90vh;
+  border-top-left-radius: 1.5rem;
+  border-top-right-radius: 1.5rem;
+  animation: slideUp 0.3s ease-out;
+  outline: none;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.modal-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0;
+  color: var(--text-primary);
+}
+
+.close-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-secondary);
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.close-button:hover {
+  background-color: var(--bg-secondary);
+}
+
+.close-button:focus-visible {
+  outline: 2px solid var(--primary-500);
+  outline-offset: 2px;
+}
+
+.modal-body {
+  padding: 1.5rem;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.modal-footer {
+  display: flex;
+  gap: 1rem;
+  padding: 1.5rem;
+  border-top: 1px solid var(--border-light);
+}
+
+.modal-footer .reset-button {
+  flex: 1;
+  background-color: transparent;
+  color: var(--text-primary);
+  border: 2px solid var(--border-light);
+  padding: 1rem;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.modal-footer .reset-button:hover {
+  background-color: var(--bg-secondary);
+  border-color: var(--text-secondary);
+}
+
+.modal-footer .reset-button:focus-visible {
+  outline: 2px solid var(--primary-500);
+  outline-offset: 2px;
+}
+
+.apply-button {
+  flex: 1;
+  background-color: var(--primary-500);
+  color: white;
+  border: none;
+  padding: 1rem;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.apply-button:hover {
+  background-color: var(--primary-600);
+}
+
+.apply-button:focus-visible {
+  outline: 2px solid var(--primary-500);
+  outline-offset: 2px;
+}
 

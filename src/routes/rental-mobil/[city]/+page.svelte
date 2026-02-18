@@ -1,6 +1,13 @@
 <script lang="ts">
   import Breadcrumb from '$lib/components/Breadcrumb.svelte';
-  import FilterSidebar from './components/FilterSidebar.svelte';
+  // Hapus FilterSidebar import yang lama
+  // import FilterSidebar from './components/filters/FilterSidebar.svelte';
+  
+  // Import komponen filter baru
+  import FilterSidebar from './components/filters/FilterSidebar.svelte';
+  import FilterModal from './components/filters/FilterModal.svelte';
+  import type { SeatCapacity } from './components/filters/index.js';
+  
   import SortDropdown, { type SortOption } from './components/SortDropdown.svelte';
   import TableOfContents from '$lib/components/TableOfContents.svelte';
   import { generateCityService } from '$lib/seo/cityService';
@@ -33,6 +40,7 @@
   // State untuk mobile drawer
   let isFilterDrawerOpen = $state(false);
   let isSortDrawerOpen = $state(false);  
+  let isMobile = $state(false);
 
   const city = $derived(data.city);
   const meta = $derived(data.meta);
@@ -44,16 +52,34 @@
   let districtListText = $state('');
   let filter = $state<RentalFilter>(DEFAULT_FILTER);
   let priceRange = $state({ min: 0, max: 4000000 });
-  let seatCapacity = $state<string | null>(null);
+  let seatCapacity = $state<SeatCapacity>(null);
   let sortBy = $state<SortOption>('harga-terendah');
   
   let filteredCars = $state<Car[]>([]);
   let priceTableData = $state<{ name: string; capacity?: number; price: number }[]>([]);
   let cheapestCar = $state<Car | null>(null);
+
+  // Props untuk filter - gunakan nama yang sama seperti di komponen
+  let filterMinPrice = $state(0);
+  let filterMaxPrice = $state(4000000);
+  let filterSelectedSeat = $state<SeatCapacity>(null);
   
   // Mouse tracking for TOC
   let mouseX = $state(0);
   let mouseY = $state(0);
+
+  // Cek ukuran layar
+  $effect(() => {
+    if (typeof window !== 'undefined') {
+      checkScreenSize();
+      window.addEventListener('resize', checkScreenSize);
+      return () => window.removeEventListener('resize', checkScreenSize);
+    }
+  });
+
+  function checkScreenSize() {
+    isMobile = window.innerWidth < 1024; // lg breakpoint
+  }
 
   $effect(() => {
     filteredCars = availableCars.filter((car: Car) => {
@@ -90,11 +116,26 @@
     });
   }
 
-  function handleSidebarFilter(event: CustomEvent) {
-    priceRange = { min: event.detail.minPrice, max: event.detail.maxPrice };
-    seatCapacity = event.detail.seatCapacity;
+  function handleFilterChange(data: { minPrice: number; maxPrice: number; seatCapacity: SeatCapacity }) {
+    filterMinPrice = data.minPrice;
+    filterMaxPrice = data.maxPrice;
+    filterSelectedSeat = data.seatCapacity;
+    
+    // Update priceRange untuk filtering cars
+    priceRange = { min: filterMinPrice, max: filterMaxPrice };
+    seatCapacity = filterSelectedSeat;
   }
 
+  function handleModalClose() {
+    isFilterDrawerOpen = false;
+  }
+  function resetMobileFilter() {
+    filterMinPrice = 0;
+    filterMaxPrice = 4000000;
+    filterSelectedSeat = null;
+    priceRange = { min: 0, max: 4000000 };
+    seatCapacity = null;
+  }
   let schema = $state<any>(null);
   let pageTitle = $state('');
 
@@ -148,12 +189,16 @@
       }, 120);
     }
 
-    window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('scroll', handleScroll, { passive: true });
+    if (typeof window !== 'undefined') {
+      window.addEventListener('mousemove', handleMouseMove);
+      window.addEventListener('scroll', handleScroll, { passive: true });
+    }
 
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('scroll', handleScroll);
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('mousemove', handleMouseMove);
+        window.removeEventListener('scroll', handleScroll);
+      }
       if (scrollTimer) clearTimeout(scrollTimer);
     };
   });
@@ -183,50 +228,103 @@
   </div>
 
   <div class="flex flex-col lg:flex-row gap-6">
-    <aside class="hidden lg:block lg:w-80 flex-shrink-0">
-      <div class="lg:sticky lg:top-24 glass-card p-6 rounded-2xl">
-        <FilterSidebar on:change={handleSidebarFilter} />
-      </div>
-    </aside>
+    <!-- Desktop Sidebar -->
+    {#if !isMobile}
+      <aside class="lg:w-96 flex-shrink-0">
+        <div class="lg:sticky lg:top-24">
+          <FilterSidebar 
+            onChange={handleFilterChange}
+            minPrice={filterMinPrice}
+            maxPrice={filterMaxPrice}
+            selectedSeat={filterSelectedSeat}
+          />
+        </div>
+      </aside>
+    {/if}
     
     <main class="flex-1">
-      <div class="hidden lg:flex justify-end mb-4">
-        <SortDropdown bind:value={sortBy} onsort={() => isSortDrawerOpen = false} />
-      </div>
+      {#if isMobile}
+        <!-- Mobile: Filter + Sort buttons -->
+        <div class="flex gap-2 mb-6">
+          <button 
+            onclick={() => isFilterDrawerOpen = true}
+            class="flex items-center justify-center gap-2 px-4 py-3 bg-blue-600 text-white rounded-xl font-medium text-sm hover:bg-blue-700 transition flex-1 relative"
+          >
+            <span class="material-symbols-rounded text-lg">tune</span>
+            Filter
+            {#if seatCapacity || priceRange.min > 0 || priceRange.max < 4000000}
+              <span class="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-white dark:border-gray-800"></span>
+            {/if}
+          </button>
+          <div class="flex-1">
+            <SortDropdown bind:value={sortBy} onsort={() => isSortDrawerOpen = false} />
+          </div>
+        </div>
+      {:else}
+        <!-- Desktop: Sort Dropdown only -->
+        <div class="flex justify-end mb-4">
+          <SortDropdown bind:value={sortBy} onsort={() => isSortDrawerOpen = false} />
+        </div>
+      {/if}
 
-      <div class="flex justify-between items-center mb-6 px-1">
+      <!-- Mobile Filter Modal -->
+      <FilterModal 
+        bind:isOpen={isFilterDrawerOpen}
+        bind:minPrice={filterMinPrice}
+        bind:maxPrice={filterMaxPrice}
+        bind:selectedSeat={filterSelectedSeat}
+        onChange={handleFilterChange}
+        onClose={handleModalClose}
+      />
+
+      <div class="flex justify-between items-center mb-6 px-1 lg:px-0">
         <p class="text-sm text-gray-500 dark:text-gray-400 font-medium">
           Ditemukan <span class="text-blue-600 font-bold">{filteredCars.length}</span> armada terbaik
         </p>
+        {#if isMobile && (filterSelectedSeat || filterMinPrice > 0 || filterMaxPrice < 4000000)}
+          <button 
+            onclick={resetMobileFilter}
+            class="text-xs text-blue-600 font-medium"
+          >
+            Reset Filter
+          </button>
+        {/if}
       </div>
 
       <div class="grid grid-cols-1 gap-4">
         {#each sortCars(filteredCars) as car (car.id)}
-          <div class="lg:hidden">
+          {#if isMobile}
             <CarCard {car} duration={filter.duration} city={city.name} />
-          </div>
-          <div class="hidden lg:block">
+          {:else}
             <CarCardDesktop {car} duration={filter.duration} city={city.name} />
-          </div>
+          {/if}
         {/each}
       </div>
 
       {#if filteredCars.length === 0}
         <div class="text-center py-20 bg-gray-50 dark:bg-gray-800/50 rounded-3xl border-2 border-dashed border-gray-200 dark:border-gray-700">
           <span class="material-symbols-rounded text-5xl text-gray-300 mb-4">no_accounts</span>
-          <p class="text-gray-500 dark:text-gray-400">Ups! Unit tidak ditemukan dengan filter ini.</p>
+          <p class="text-gray-500 dark:text-gray-400 mb-4">Ups! Unit tidak ditemukan dengan filter ini.</p>
+          <button 
+            onclick={resetMobileFilter}
+            class="text-blue-600 font-medium hover:underline"
+          >
+            Reset Filter
+          </button>
         </div>
       {/if}
     </main>
   </div>
+
+  <!-- Konten SEO dan FAQ -->
   <div class="mt-20 border-t border-gray-100 dark:border-gray-800 pt-12">
     <div class="flex flex-col lg:flex-row items-start gap-12 relative h-full">
-      
       <div class="flex-1 min-w-0"> 
         <div class="prose dark:prose-invert max-w-none">
           <div class="max-h-[calc(100vh-200px)] overflow-y-auto custom-scrollbar pr-2">
-                <TableOfContents {sections} />
-              </div>
+            <TableOfContents {sections} />
+          </div>
+          
           {#if cityContent?.body}
             <div class="city-body-content">{@html cityContent.body}</div>
 
@@ -256,6 +354,6 @@
           {/if}
         </div>
       </div>
-
-    </div> </div>
+    </div>
+  </div>
 </div>

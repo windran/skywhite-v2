@@ -1,20 +1,52 @@
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte';
+  export type SeatCapacity = '4' | '5-6' | '>6' | null;
 
-  type SeatCapacity = '4' | '5-6' | '>6' | null;
+  interface FilterChangeData {
+    minPrice: number;
+    maxPrice: number;
+    seatCapacity: SeatCapacity;
+  }
   
+  // Props dengan nilai default
+  let { 
+    externalMinPrice = null,
+    externalMaxPrice = null,
+    externalSelectedSeat = null,
+    onChange = (data: FilterChangeData) => {}
+  }: {
+    externalMinPrice?: number | null;
+    externalMaxPrice?: number | null;
+    externalSelectedSeat?: SeatCapacity | null;
+    onChange?: (data: FilterChangeData) => void;
+  } = $props();
+  
+  // Internal state
   let minPrice = $state(0);
   let maxPrice = $state(4000000);
   let selectedSeat: SeatCapacity = $state(null);
   
-  const dispatch = createEventDispatcher<{
-    change: { minPrice: number; maxPrice: number; seatCapacity: SeatCapacity }
-  }>();
+  // Gunakan $effect untuk merespon perubahan props
+  $effect(() => {
+    if (externalMinPrice !== null && externalMinPrice !== undefined) {
+      minPrice = externalMinPrice;
+    }
+  });
+
+  $effect(() => {
+    if (externalMaxPrice !== null && externalMaxPrice !== undefined) {
+      maxPrice = externalMaxPrice;
+    }
+  });
+
+  $effect(() => {
+    if (externalSelectedSeat !== null && externalSelectedSeat !== undefined) {
+      selectedSeat = externalSelectedSeat;
+    }
+  });
   
-  // Logic Slider: Mencegah thumb saling tumpang tindih
   function handleMinPrice(e: Event) {
     const value = parseInt((e.target as HTMLInputElement).value);
-    minPrice = Math.min(value, maxPrice - 200000); // Jarak minimal 200rb
+    minPrice = Math.min(value, maxPrice - 200000);
     dispatchChange();
   }
   
@@ -30,7 +62,7 @@
   }
 
   function dispatchChange() {
-    dispatch('change', { minPrice, maxPrice, seatCapacity: selectedSeat });
+    onChange({ minPrice, maxPrice, seatCapacity: selectedSeat });
   }
   
   function formatPrice(price: number): string {
@@ -42,6 +74,7 @@
   const minPercent = $derived((minPrice / 4000000) * 100);
   const maxPercent = $derived((maxPrice / 4000000) * 100);
   
+  // Fungsi untuk reset dari parent
   export function reset() {
     minPrice = 0;
     maxPrice = 4000000;
@@ -50,15 +83,9 @@
   }
 </script>
 
-<div class="filter-sidebar">
-  <div class="filter-header">
-    <div class="title-group">
-      <span class="material-symbols-rounded">tune</span>
-      <h2 class="filter-title">Filter Pencarian</h2>
-    </div>
-    <button class="reset-button" onclick={reset}>Reset</button>
-  </div>
-
+<!-- Konten filter - tetap sama -->
+<div class="filter-content">
+  <!-- Rentang Harga -->
   <div class="filter-section">
     <h3 class="section-label">Rentang Harga</h3>
     
@@ -98,6 +125,7 @@
     </div>
   </div>
 
+  <!-- Kapasitas Kursi -->
   <div class="filter-section">
     <h3 class="section-label">Kapasitas Kursi</h3>
     <div class="seat-grid">

@@ -32,9 +32,11 @@
     car: Car;
     duration: RentalDuration;
     city: string;
+    // Gunakan onSelect sebagai callback
+    onSelect?: () => void;
   }
 
-  let { car, duration, city }: Props = $props();
+  let { car, duration, city, onSelect }: Props = $props();
 
   const transmissionDisplay = $derived(() => {
     const t = car.transmission?.toLowerCase() || '';
@@ -42,6 +44,9 @@
     if (t.includes('manual')) return 'MANUAL';
     return 'AUTOMATIC';
   });
+
+  const brandDisplay = $derived(car.brand?.toUpperCase() ?? 'UNIT');
+  const carNameDisplay = $derived(car.name.toUpperCase());
 
   const priceValue = $derived(car.price?.[duration] ?? car.price?.harian ?? 0);
   const durationLabel = $derived(
@@ -59,7 +64,7 @@
   }
 </script>
 
-<div class="mobile-premium-card">
+<button class="mobile-premium-card" onclick={onSelect} type="button">
   <div class="top-meta">
     <span class="category-text">{car.type?.toUpperCase() || 'PASSENGER'}</span>
     <span class="city-text">
@@ -72,12 +77,9 @@
       <img src={car.image || car.images?.[0]} alt={car.name} class="car-img" />
     </div>
     <div class="title-container">
-      <h3 class="car-name">{car.name.toUpperCase()}</h3>
+      <span class="brand-label">{brandDisplay}</span>
+      <h3 class="car-name">{carNameDisplay}</h3>
       <div class="service-tag">
-        <span class="tag {car.withDriver ? 'driver' : 'self-drive'}">
-          <span class="material-symbols-rounded">{car.withDriver ? 'person_pin' : 'key'}</span>
-          {car.withDriver ? 'Dengan Sopir' : 'Lepas Kunci'}
-        </span>
       </div>
     </div>
   </div>
@@ -103,15 +105,13 @@
 
   <div class="divider"></div>
 
-  <div class="card-footer">
-    <div class="price-box">
-      <span class="price-label">Harga per {durationLabel}</span>
+<div class="card-footer">
+    <span class="footer-label">Harga Sewa</span>
+    <div class="price-container">
       <div class="price-value">
         <span class="amount">{formatPrice(priceValue)}</span>
         <span class="unit">/{durationLabel}</span>
       </div>
     </div>
-    <button class="btn-select">Pilih Unit</button>
   </div>
-</div>
-
+</button>

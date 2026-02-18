@@ -1,99 +1,133 @@
-import type { Car } from '$lib/types/rental-filters';
+// src/lib/data/cars.ts
+import type { Car } from '$lib/types/car';
 
 export const cars: Car[] = [
   {
-    id: 'avanza-2023',
-    name: 'Toyota Avanza 2023',
+    id: 'avanza-manual',
+    slug: 'toyota-avanza-manual',
+    name: 'Avanza Facelift',
     brand: 'Toyota',
     type: 'mpv',
-    transmission: 'matik',
+    transmission: 'manual',
     capacity: 7,
-    baggage: 3,
-    price: {
-      harian: 350000,
-      mingguan: 2100000,
-      bulanan: 8400000,
-      tahunan: 0 // atau undefined kalau tidak tersedia
-    },
-    withDriver: true,
-    image: '/images/cars/avanza.jpg',
-    features: ['AC', 'Central Lock', 'Audio', 'USB Port'],
-    availableIn: ['jakarta', 'bogor', 'depok', 'tangerang', 'bekasi']
+    luggage: 2,
+    year: 2023,
+    image: '/images/cars/avanza.png',
+    price: { harian: 350000, mingguan: 2100000, bulanan: 8400000 },
+    withDriver: false,
+    isAvailable: true,
+    availableIn: ['jakarta', 'bekasi', 'bandung']
   },
   {
-    id: 'innova-2023',
-    name: 'Toyota Innova Reborn',
+    id: 'innova-reborn',
+    slug: 'toyota-innova-reborn',
+    name: 'Innova Reborn',
     brand: 'Toyota',
-    type: 'mpv',
-    transmission: 'matik',
+    type: 'mpv', 
+    transmission: 'auto', 
     capacity: 7,
-    baggage: 4,
-    price: {
-      harian: 550000,
-      mingguan: 3300000,
-      bulanan: 13200000,
-      tahunan: 0
-    },
+    luggage: 4,
+    year: 2022,
+    image: '/images/cars/innova.png',
+    price: { harian: 800000, mingguan: 5200000, bulanan: 18000000 },
     withDriver: true,
-    image: '/images/cars/innova.jpg',
-    features: ['AC', 'Leather Seat', 'Audio', 'USB Port', 'Power Window'],
-    availableIn: ['jakarta', 'bogor', 'bandung', 'surabaya']
+    isAvailable: true,
+    availableIn: ['jakarta', 'bogor', 'bekasi']
   },
   {
-    id: 'pajero-2023',
-    name: 'Mitsubishi Pajero Sport',
+    id: 'xpander-cross',
+    slug: 'mitsubishi-xpander-cross',
+    name: 'Xpander Cross',
     brand: 'Mitsubishi',
-    type: 'suv',
-    transmission: 'matik',
+    type: 'suv', 
+    transmission: 'auto',
     capacity: 7,
-    baggage: 3,
-    price: {
-      harian: 850000,
-      mingguan: 5100000,
-      bulanan: 20400000,
-      tahunan: 0
-    },
-    withDriver: true,
-    image: '/images/cars/pajero.jpg',
-    features: ['AC', 'Leather Seat', 'Sunroof', '360 Camera', 'Premium Audio'],
-    availableIn: ['jakarta', 'bandung', 'surabaya', 'bali']
+    luggage: 3,
+    year: 2023,
+    image: '/images/cars/xpander.png',
+    price: { harian: 650000, mingguan: 4000000, bulanan: 14000000 },
+    withDriver: false,
+    isAvailable: true,
+    availableIn: ['jakarta', 'tangerang', 'bandung']
   },
   {
-    id: 'brio-2023',
-    name: 'Honda Brio',
+    id: 'brio-rs',
+    slug: 'honda-brio-rs',
+    name: 'Brio RS',
     brand: 'Honda',
     type: 'hatchback',
-    transmission: 'manual',
+    transmission: 'auto',
     capacity: 5,
-    baggage: 2,
-    price: {
-      harian: 250000,
-      mingguan: 1500000,
-      bulanan: 6000000,
-      tahunan: 0
-    },
+    luggage: 1,
+    year: 2023,
+    image: '/images/cars/brio.png',
+    price: { harian: 300000, mingguan: 1800000, bulanan: 6500000 },
     withDriver: false,
-    image: '/images/cars/brio.jpg',
-    features: ['AC', 'Audio', 'Efisien BBM'],
-    availableIn: ['jakarta', 'bogor', 'depok', 'tangerang', 'bekasi', 'bandung']
+    isAvailable: true,
+    availableIn: ['jakarta', 'depok', 'bekasi']
   },
   {
-    id: 'fortuner-2023',
-    name: 'Toyota Fortuner',
+    id: 'camry-v',
+    slug: 'toyota-camry-v',
+    name: 'Camry V-Type',
     brand: 'Toyota',
-    type: 'suv',
-    transmission: 'matik',
-    capacity: 7,
-    baggage: 3,
-    price: {
-      harian: 950000,
-      mingguan: 5700000,
-      bulanan: 22800000,
-      tahunan: 0
-    },
+    type: 'sedan',
+    transmission: 'auto',
+    capacity: 5,
+    luggage: 2,
+    year: 2022,
+    image: '/images/cars/camry.png',
+    price: { harian: 1200000, mingguan: 8000000, bulanan: 28000000 },
     withDriver: true,
-    image: '/images/cars/fortuner.jpg',
-    features: ['AC', 'Leather Seat', '4x4', 'Sunroof', 'Premium Audio'],
-    availableIn: ['jakarta', 'bandung', 'surabaya', 'bali', 'medan']
-  }
-];
+    isAvailable: true,
+    availableIn: ['jakarta', 'surabaya']
+  },
+  {
+    id: 'alphard-hef',
+    slug: 'toyota-alphard-transformer',
+    name: 'Alphard Transformer',
+    brand: 'Toyota',
+    type: 'premium',
+    transmission: 'auto',
+    capacity: 6,
+    luggage: 4,
+    year: 2023,
+    image: '/images/cars/alphard.png',
+    price: { harian: 2500000, mingguan: 15000000, bulanan: 55000000 },
+    withDriver: true,
+    isAvailable: true,
+    availableIn: ['jakarta', 'bali']
+  },
+  {
+    id: 'pajero-sport',
+    slug: 'mitsubishi-pajero-sport',
+    name: 'Pajero Sport Dakar',
+    brand: 'Mitsubishi',
+    type: 'suv',
+    transmission: 'auto',
+    capacity: 7,
+    luggage: 4,
+    year: 2023,
+    image: '/images/cars/pajero.png',
+    price: { harian: 1400000, mingguan: 9000000, bulanan: 32000000 },
+    withDriver: true,
+    isAvailable: true,
+    availableIn: ['jakarta', 'bogor', 'bekasi']
+  },
+  {
+    id: 'ioniq-5',
+    slug: 'hyundai-ioniq-5',
+    name: 'Ioniq 5 Electric',
+    brand: 'Hyundai',
+    type: 'premium',
+    transmission: 'auto',
+    capacity: 5,
+    luggage: 2,
+    year: 2024,
+    image: '/images/cars/ioniq5.png',
+    price: { harian: 2000000, mingguan: 12000000, bulanan: 45000000 },
+    withDriver: true,
+    isAvailable: true,
+    availableIn: ['jakarta', 'tangerang']
+  } 
+]; // <-- Pastikan ditutup dengan kurung siku dan titik koma

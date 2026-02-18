@@ -1,40 +1,25 @@
-<script>
-  export let items = [];
+<script lang="ts">
+  // Definisikan tipe untuk item breadcrumb
+  interface BreadcrumbItem {
+    label: string;
+    url: string;
+  }
 
-  const schema = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: items.map((item, index) => ({
-      "@type": "ListItem",
-      position: index + 1,
-      name: item.label,
-      item: item.url
-        ? `https://skywhiterentcar.com${item.url}`
-        : undefined
-    }))
-  };
+  // Gunakan $props() dengan tipe yang jelas
+  let { items = [] }: { items: BreadcrumbItem[] } = $props();
 </script>
 
-<nav aria-label="Breadcrumb">
-  <ul style="display:flex; gap:8px; list-style:none; padding:0;">
-    {#each items as item, index}
-      <li>
-        {#if item.url}
-          <a href={item.url}>{item.label}</a>
+<nav aria-label="Breadcrumb" class="breadcrumb">
+  <ol class="breadcrumb-list">
+    {#each items as item, index (index)}
+      <li class="breadcrumb-item">
+        {#if index === items.length - 1}
+          <span class="breadcrumb-current">{item.label}</span>
         {:else}
-          <span>{item.label}</span>
-        {/if}
-
-        {#if index < items.length - 1}
-          <span> / </span>
+          <a href={item.url} class="breadcrumb-link">{item.label}</a>
+          <span class="breadcrumb-separator">/</span>
         {/if}
       </li>
     {/each}
-  </ul>
+  </ol>
 </nav>
-
-<svelte:head>
-  <script type="application/ld+json">
-    {JSON.stringify(schema)}
-  </script>
-</svelte:head>

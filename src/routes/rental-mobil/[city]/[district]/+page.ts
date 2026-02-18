@@ -1,33 +1,38 @@
 import { error } from '@sveltejs/kit';
 import { cities } from '$lib/data/cities';
 import { districts } from '$lib/data/districts';
-import { generateDistrictMeta } from '$lib/seo/districtMeta';
+import { cars } from '$lib/data/cars';
+import { generateCityMeta } from '$lib/seo/cityMeta';
+import type { Car } from '$lib/types/rental-filters';
 
 export async function load({ params }) {
   const city = cities.find((c) => c.slug === params.city);
+
   if (!city) throw error(404);
 
-  const district = districts.find(
-    (d) =>
-      d.slug === params.district &&
-      d.citySlug === city.slug
+  const cityDistricts = districts.filter(
+    (d) => d.citySlug === city.slug
   );
 
-  if (!district) throw error(404);
+  const availableCars: Car[] = cars.filter(car => 
+    car.availableIn.includes(city.slug)
+  );
 
-  let districtContent = null;
-
+  let cityContent = null;
   try {
-    const module = await import(
-      `$lib/content/locations/${city.slug}/${district.slug}.ts`
-    );
-    districtContent = module.default;
-  } catch {}
+    // PATH DIUBAH: tambah /id/
+    const module = await import(`$lib/content/id/locations/${city.slug}/_city.ts`);
+    cityContent = module?.default ?? null;
+  } catch {
+    // Fallback kalau file tidak ditemukan
+    console.log(`Konten untuk ${city.slug} tidak ditemukan`);
+  }
 
   return {
     city,
-    district,
-    districtContent,
-    meta: generateDistrictMeta({ city, district })
+    cityDistricts,
+    cityContent,
+    availableCars,
+    meta: generateCityMeta(city)
   };
 }

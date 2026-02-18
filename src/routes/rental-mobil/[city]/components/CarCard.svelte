@@ -1,88 +1,117 @@
 <script lang="ts">
-  import type { Car, RentalDuration } from '$lib/types/rental-filters';
-  
-  export let car: Car;
-  export let duration: RentalDuration;
-  export let city: string;
-  
-  const durationLabels = {
-    harian: 'per hari',
-    mingguan: 'per minggu',
-    bulanan: 'per bulan',
-    tahunan: 'per tahun'
-  };
-  
-  function formatPrice(price: number): string {
+  interface CarPrice {
+    harian?: number;
+    mingguan?: number;
+    bulanan?: number;
+    tahunan?: number;
+    [key: string]: number | undefined;
+  }
+
+  interface Car {
+    id: string;
+    slug?: string;
+    name: string;
+    brand?: string;
+    type?: string;
+    transmission?: string;
+    capacity?: number;
+    luggage?: number;
+    year?: number;
+    image?: string;
+    images?: string[];
+    price?: CarPrice;
+    withDriver?: boolean;
+    features?: string[];
+    isAvailable?: boolean;
+    description?: string;
+  }
+
+  type RentalDuration = 'harian' | 'mingguan' | 'bulanan' | 'tahunan';
+
+  interface Props {
+    car: Car;
+    duration: RentalDuration;
+    city: string;
+  }
+
+  let { car, duration, city }: Props = $props();
+
+  const transmissionDisplay = $derived(() => {
+    const t = car.transmission?.toLowerCase() || '';
+    if (t.includes('auto')) return 'AUTOMATIC';
+    if (t.includes('manual')) return 'MANUAL';
+    return 'AUTOMATIC';
+  });
+
+  const priceValue = $derived(car.price?.[duration] ?? car.price?.harian ?? 0);
+  const durationLabel = $derived(
+    duration === 'harian' ? 'hari' :
+    duration === 'mingguan' ? 'minggu' :
+    duration === 'bulanan' ? 'bulan' : 'tahun'
+  );
+
+  function formatPrice(p: number) {
     return new Intl.NumberFormat('id-ID', {
       style: 'currency',
       currency: 'IDR',
-      minimumFractionDigits: 0
-    }).format(price);
+      minimumFractionDigits: 0,
+    }).format(p).replace('Rp', 'Rp ');
   }
-
-  // Ambil harga, kasih default 0 kalau undefined
-  $: currentPrice = car.price?.[duration] || 0;
 </script>
 
-<a 
-  href={`/rental-mobil/${city}/${car.id}`}
-  class="block bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow overflow-hidden"
->
-  <div class="aspect-w-16 aspect-h-9 bg-gray-200">
-    <img 
-      src={car.image} 
-      alt={car.name}
-      class="w-full h-48 object-cover"
-      loading="lazy"
-    />
+<div class="mobile-premium-card">
+  <div class="top-meta">
+    <span class="category-text">{car.type?.toUpperCase() || 'PASSENGER'}</span>
+    <span class="city-text">
+      <span class="material-symbols-rounded">location_on</span> {city}
+    </span>
   </div>
-  
-  <div class="p-4">
-    <div class="flex justify-between items-start mb-2">
-      <h3 class="font-semibold text-lg">{car.name}</h3>
-      <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">
-        {car.type.toUpperCase()}
-      </span>
+
+  <div class="main-visual">
+    <div class="img-container">
+      <img src={car.image || car.images?.[0]} alt={car.name} class="car-img" />
     </div>
-    
-    <div class="flex items-center text-sm text-gray-600 mb-2">
-      <span class="mr-3">👥 {car.capacity} org</span>
-      <span>🧳 {car.baggage} bagasi</span>
-    </div>
-    
-    <div class="flex items-center justify-between">
-      <div>
-        {#if currentPrice > 0}
-          <span class="text-xl font-bold text-blue-600">
-            {formatPrice(currentPrice)}
-          </span>
-          <span class="text-sm text-gray-500">
-            /{durationLabels[duration]}
-          </span>
-        {:else}
-          <span class="text-sm text-gray-500">
-            Hubungi untuk harga
-          </span>
-        {/if}
+    <div class="title-container">
+      <h3 class="car-name">{car.name.toUpperCase()}</h3>
+      <div class="service-tag">
+        <span class="tag {car.withDriver ? 'driver' : 'self-drive'}">
+          <span class="material-symbols-rounded">{car.withDriver ? 'person_pin' : 'key'}</span>
+          {car.withDriver ? 'Dengan Sopir' : 'Lepas Kunci'}
+        </span>
       </div>
-      <span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">
-        {car.transmission === 'matik' ? '⚡ Matic' : '⚙️ Manual'}
-      </span>
     </div>
-    
-    {#if car.features?.length > 0}
-      <div class="mt-3 flex flex-wrap gap-1">
-        {#each car.features.slice(0, 3) as feature}
-          <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">
-            {feature}
-          </span>
-        {/each}
-        {#if car.features.length > 3}
-          <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">
-            +{car.features.length - 3}
-          </span>
-        {/if}
-      </div>
-    {/if}
   </div>
-</a>
+
+  <div class="specs-grid">
+    <div class="spec-item">
+      <span class="material-symbols-rounded">settings</span>
+      <span>{transmissionDisplay()}</span>
+    </div>
+    <div class="spec-item">
+      <span class="material-symbols-rounded">group</span>
+      <span>{car.capacity ?? 7} Kursi</span>
+    </div>
+    <div class="spec-item">
+      <span class="material-symbols-rounded">luggage</span>
+      <span>{car.luggage ?? 2} Bagasi</span>
+    </div>
+    <div class="spec-item">
+      <span class="material-symbols-rounded">ac_unit</span>
+      <span>A/C Dingin</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="card-footer">
+    <div class="price-box">
+      <span class="price-label">Harga per {durationLabel}</span>
+      <div class="price-value">
+        <span class="amount">{formatPrice(priceValue)}</span>
+        <span class="unit">/{durationLabel}</span>
+      </div>
+    </div>
+    <button class="btn-select">Pilih Unit</button>
+  </div>
+</div>
+

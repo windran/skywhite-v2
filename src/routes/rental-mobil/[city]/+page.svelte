@@ -1,9 +1,5 @@
 <script lang="ts">
   import Breadcrumb from '$lib/components/Breadcrumb.svelte';
-  // Hapus FilterSidebar import yang lama
-  // import FilterSidebar from './components/filters/FilterSidebar.svelte';
-  
-  // Import komponen filter baru
   import FilterSidebar from './components/filters/FilterSidebar.svelte';
   import FilterModal from './components/filters/FilterModal.svelte';
   import type { SeatCapacity } from './components/filters/index.js';
@@ -79,6 +75,10 @@
 
   function checkScreenSize() {
     isMobile = window.innerWidth < 1024; // lg breakpoint
+  }
+
+  function handleBooking(car: Car) {
+  console.log('Booking', car);
   }
 
   $effect(() => {
@@ -279,7 +279,7 @@
 
       <div class="flex justify-between items-center mb-6 px-1 lg:px-0">
         <p class="text-sm text-gray-500 dark:text-gray-400 font-medium">
-          Ditemukan <span class="text-blue-600 font-bold">{filteredCars.length}</span> armada terbaik
+          Ditemukan <span class="text-blue-600 font-bold">{filteredCars.length}</span> armada
         </p>
         {#if isMobile && (filterSelectedSeat || filterMinPrice > 0 || filterMaxPrice < 4000000)}
           <button 
@@ -294,9 +294,19 @@
       <div class="grid grid-cols-1 gap-4">
         {#each sortCars(filteredCars) as car (car.id)}
           {#if isMobile}
-            <CarCard {car} duration={filter.duration} city={city.name} />
+            <CarCard
+              {car}
+              duration={filter.duration}
+              city={city.name}
+              onBooking={() => handleBooking(car)}
+            />
           {:else}
-            <CarCardDesktop {car} duration={filter.duration} city={city.name} />
+            <CarCardDesktop
+              {car}
+              duration={filter.duration}
+              city={city.name}
+              onBooking={() => handleBooking(car)}
+            />
           {/if}
         {/each}
       </div>

@@ -1540,3 +1540,13 @@ aside { transition: transform 0.15s ease-out; }
   outline-offset: 2px;
 }
 
+:global(.city-body-content p) {
+    margin-bottom: 1.5rem;
+    line-height: 1.75;
+  }
+  
+  :global(.city-body-content h2) {
+    margin-top: 2.5rem;
+    margin-bottom: 1.25rem;
+    font-weight: 800;
+  }

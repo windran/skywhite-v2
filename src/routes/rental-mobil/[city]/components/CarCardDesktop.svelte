@@ -8,10 +8,10 @@
   duration: RentalDuration;
   city: string;
   // Gunakan nama onSelect untuk menghindari tabrakan nama global
-  onSelect?: () => void; 
+  onBooking?: () => void; 
   }
 
-  let { car, duration, city, onSelect }: Props = $props();
+  let { car, duration, city, onBooking }: Props = $props();
 
   // Logic Harga & Label
   const price = $derived(car.price?.[duration] ?? car.price?.harian ?? 0);
@@ -104,7 +104,7 @@
         </div>
       </div>
       
-      <button class="booking-btn" onclick={onSelect} type="button">
+      <button class="booking-btn" onclick={onBooking} type="button">
         <span>Pilih Unit</span>
         <div class="btn-icon">
           <span class="material-symbols-rounded">arrow_forward</span>

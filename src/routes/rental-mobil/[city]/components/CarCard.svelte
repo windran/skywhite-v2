@@ -33,10 +33,10 @@
     duration: RentalDuration;
     city: string;
     // Gunakan onSelect sebagai callback
-    onSelect?: () => void;
+    onBooking: () => void;
   }
 
-  let { car, duration, city, onSelect }: Props = $props();
+  let { car, duration, city, onBooking }: Props = $props();
 
   const transmissionDisplay = $derived(() => {
     const t = car.transmission?.toLowerCase() || '';
@@ -64,7 +64,7 @@
   }
 </script>
 
-<button class="mobile-premium-card" onclick={onSelect} type="button">
+<button class="mobile-premium-card" onclick={onBooking} type="button">
   <div class="top-meta">
     <span class="category-text">{car.type?.toUpperCase() || 'PASSENGER'}</span>
     <span class="city-text">
